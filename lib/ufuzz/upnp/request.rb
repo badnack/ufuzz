@@ -521,7 +521,7 @@ EOS
   def msearch(timeout = 10)
     default_st = 'upnp:rootdevice'
     st = 'schemas-upnp-org'
-    myip = local_ip
+    myip = ''
     lport = @port
     
     st = default_st

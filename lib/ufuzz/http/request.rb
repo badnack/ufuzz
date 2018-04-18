@@ -15,7 +15,7 @@ class Request
   end
   
   def to_s
-    request
+    return request != nil ? request : ''
   end
   
   def inspect
