@@ -107,7 +107,6 @@ class Fuzzer
   
   def self.load(opts)
     config = UFuzz::Config.create(opts)
-    
     if config.upnp
       fuzzer = UFuzz::UPnP::Fuzzer.new(config)
     else

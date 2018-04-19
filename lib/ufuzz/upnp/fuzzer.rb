@@ -29,25 +29,37 @@ class Fuzzer < UFuzz::Http::Fuzzer
       end
     end
   end
-  
+
+
+  def set_request_and_fuzz(temp_request, fuzz)
+    req = UFuzz::Http::Request.new(temp_request)
+    req.update_content_length
+    do_fuzz_case(req, 0, fuzz)
+  end
+
   def soap_fuzzer
-    @request.to_s.scan(/(\$PARAM_[0-9]+_\$)/) do |params|
-      params.each do |param_id|
-        @testcase.rewind('')
-        while(@testcase.next?)
-          fuzz = @testcase.next
-          @config.encoders.each do |encoder|
-            encoded_fuzz = encoder.call(fuzz)
-            temp_request = @request.to_s.gsub(param_id, encoded_fuzz).gsub(/(\$PARAM_[0-9]+_\$)/, '1')
-            req = UFuzz::Http::Request.new(temp_request)
-            req.update_content_length
-            do_fuzz_case(req, 0, fuzz)
+    @testcase.rewind('')
+    while(@testcase.next?)
+      fuzz = @testcase.next
+      @config.encoders.each do |encoder|
+        encoded_fuzz = encoder.call(fuzz)
+        if config[:all_once]
+          print @request.to_s
+          temp_request = @request.to_s.gsub(/(\$PARAM_[0-9]+_\$)/, encoded_fuzz)
+          if @request.to_s =~ /(\$PARAM_[0-9]+_\$)/
+            set_request_and_fuzz(temp_request, fuzz)
+          end
+        else
+           @request.to_s.scan(/(\$PARAM_[0-9]+_\$)/) do |params|
+            params.each do |param_id|
+              temp_request = @request.to_s.gsub(param_id, encoded_fuzz).gsub(/(\$PARAM_[0-9]+_\$)/, '1')
+              set_request_and_fuzz(temp_request, fuzz)
+            end
           end
         end
       end
     end
   end
 end
-
 end
 end

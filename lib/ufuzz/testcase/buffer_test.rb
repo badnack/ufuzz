@@ -14,7 +14,13 @@ class BufferTest < TestCase
   end
   
   def test(content)
-    @monitor.check(content) ? Fault.new('buffer overflow', 'possible buffer overflow', @monitor.crash_dump) : nil
+    delay = Time.now.to_f - @time
+
+    ret = @monitor.check(content) ? Fault.new('buffer overflow', 'possible buffer overflow', @monitor.crash_dump) : nil
+    if not ret and delay >= Config.instance.detect_delay
+      ret = Fault.new('DoS', "possible dos vulnerability: delay #{delay}")
+    end
+    ret
   end
   
   def update_transforms

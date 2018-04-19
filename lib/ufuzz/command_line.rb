@@ -64,7 +64,11 @@ module Options
       opts.on('-v', '--verbose NUM', 'Enabled verbose output, from 0 (fail) to 4 (trace), default 2 (info)') do |v|
         options[:verbose] = v.to_i
       end
-  
+
+      opts.on('-a', '--all-at-once', 'Fuzz every request parameter all at once rather than each one individually') do |h|
+        options[:all_once] = true
+      end
+
       opts.on( '-h', '--help', 'Display this screen' ) do
         puts opts
         exit
