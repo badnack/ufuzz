@@ -12,8 +12,8 @@ class SerialMonitor < UFuzz::Monitor
       end
     }
   end
-  
-  def check
+
+  def check(content = nil)
     curr_length = @log.length
     if @log[@index..-1] =~ /SIGSEGV/
       sleep(10)

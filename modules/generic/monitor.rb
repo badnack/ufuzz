@@ -2,7 +2,7 @@ class GenericMonitor < UFuzz::Monitor
   def start
   end
   
-  def check
+  def check(content = nil)
   end
   
   def close

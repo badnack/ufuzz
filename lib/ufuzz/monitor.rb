@@ -14,7 +14,7 @@ class Monitor
   def close
   end
   
-  def check
+  def check(content = nil)
   end
 end
 

@@ -6,7 +6,7 @@ class TelnetMonitor < UFuzz::Monitor
     telnet_cmd('diag debug crash clear')
   end
   
-  def check
+  def check(content = nil)
     telnet_cmd('diag debug crash read') do |c|
       if c && c.length > 300
         @crash_dump = c.dup

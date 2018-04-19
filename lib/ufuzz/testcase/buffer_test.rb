@@ -14,7 +14,7 @@ class BufferTest < TestCase
   end
   
   def test(content)
-    @monitor.check ? Fault.new('buffer overflow', 'possible buffer overflow', @monitor.crash_dump) : nil
+    @monitor.check(content) ? Fault.new('buffer overflow', 'possible buffer overflow', @monitor.crash_dump) : nil
   end
   
   def update_transforms
