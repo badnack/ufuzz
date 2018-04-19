@@ -32,19 +32,19 @@ class Fuzzer < UFuzz::Http::Fuzzer
   
   def soap_fuzzer
     @request.to_s.scan(/(\$PARAM_[0-9]+_\$)/) do |params|
-      #params.each do |param_id|
+      params.each do |param_id|
         @testcase.rewind('')
         while(@testcase.next?)
           fuzz = @testcase.next
           @config.encoders.each do |encoder|
             encoded_fuzz = encoder.call(fuzz)
-            temp_request = @request.to_s.gsub(/(\$PARAM_[0-9]+_\$)/, encoded_fuzz)#.gsub(/(\$PARAM_[0-9]+_\$)/, '1')
+            temp_request = @request.to_s.gsub(param_id, encoded_fuzz).gsub(/(\$PARAM_[0-9]+_\$)/, '1')
             req = UFuzz::Http::Request.new(temp_request)
             req.update_content_length
             do_fuzz_case(req, 0, fuzz)
           end
         end
-      #end
+      end
     end
   end
 end

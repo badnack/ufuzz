@@ -34,6 +34,7 @@ module Options
         options[:upnp] = true
         options[:soap] = true
         options[:fuzzers] = ['post']
+        options[:module] = 'http'
       end
   
       opts.on('-f', '--fuzzers STR', 'Comma separated list of fuzzing engines to utilize (param,post,token,...)') do |f|
